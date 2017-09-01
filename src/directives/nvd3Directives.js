@@ -83,6 +83,44 @@
         }, true);
     }
 
+    function watchMargins( scope ) {
+        scope.$watch('[margin, xaxislabeldistance, xaxisrotatelabels, yaxislabeldistance, data]', function(newVal, oldVal) {
+            if (newVal && scope.chart) {
+                // index 0 is the margin
+                var obj = typeof newVal[0] === 'string' ? scope.$eval(newVal[0]) : newVal[0];
+                var m = scope.chart.margin();
+                m.left = obj.left;
+                m.right = obj.right;
+                m.top = obj.top;
+                m.bottom = obj.bottom;
+
+                if (scope.chart.xAxis) {
+                    // index 1 is the x axis title distance value
+                    // must run statement below to apply it
+                    if (newVal[1] !== oldVal[1]) {
+                        scope.chart.xAxis.axisLabelDistance(+newVal[1]);
+                    }
+
+                    // index 2 is the x-axis rotate value
+                    // must run statement below to apply it
+                    if (newVal[2] !== oldVal[2]) {
+                        scope.chart.xAxis.rotateLabels(+newVal[2]);
+                    }
+                }
+
+                if (scope.chart.yAxis) {
+                    // index 3 is the y axis title distance value
+                    // must run the statement below to apply it
+                    if (newVal[3] !== oldVal[3]) {
+                        scope.chart.yAxis.rotateLabels(+newVal[3]);
+                    }
+                }
+
+                scope.chart.update();
+            }
+        }, true);
+    }
+
     angular.module('nvd3ChartDirectives', [])
         .directive('nvd3LineChart', ['$filter', function($filter){
             return {
@@ -101,7 +139,7 @@
                     rightalignyaxis: '@',
                     defaultstate: '@',
                     nodata: '@',
-                    margin: '&',
+                    margin: '@',
                     tooltipcontent: '&',
                     color: '&',
                     x: '&',
@@ -185,6 +223,7 @@
                 }],
                 link: function(scope, element, attrs){
                     watchDimensions(scope, attrs, element);
+                    watchMargins( scope );
                     scope.$watch('data', function(data){
                         if (data && angular.isDefined(scope.filtername) && angular.isDefined(scope.filtervalue)) {
                             data =  $filter(scope.filtername)(data, scope.filtervalue);
@@ -416,7 +455,7 @@
                     tooltips: '@',
                     showcontrols: '@',
                     nodata: '@',
-                    margin: '&',
+                    margin: '@',
                     tooltipcontent: '&',
                     color: '&',
                     x: '&',
@@ -463,7 +502,7 @@
                     xaxisrotatelabels: '@',
                     xaxisrotateylabel: '@',
                     xaxisstaggerlabels: '@',
-                    xaxisaxislabeldistance: '@',
+                    xaxislabeldistance: '@',
                     //yaxis
                     showyaxis: '&',
                     useinteractiveguideline: '@',
@@ -633,7 +672,7 @@
                     reducexticks: '@',
                     staggerlabels: '@',
                     rotatelabels: '@',
-                    margin: '&',
+                    margin: '@',
                     x: '&',
                     y: '&',
                     //forcex is not exposed in the nvd3 multibar.js file.  it is not here on purpose.
@@ -663,7 +702,7 @@
                     xaxisrotatelabels: '@',
                     xaxisrotateylabel: '@',
                     xaxisstaggerlabels: '@',
-                    xaxisaxislabeldistance: '@',
+                    xaxislabeldistance: '@',
                     //yaxis
                     showyaxis: '&',
                     yaxisorient: '&',
@@ -711,6 +750,7 @@
                 }],
                 link: function(scope, element, attrs){
                     watchDimensions(scope, attrs, element);
+                    watchMargins(scope);
                     scope.$watch('data', function(data){
                         if (data && angular.isDefined(scope.filtername) && angular.isDefined(scope.filtervalue)) {
                             data =  $filter(scope.filtername)(data, scope.filtervalue);
@@ -783,7 +823,7 @@
                     tooltipcontent: '&',
                     staggerlabels: '@',
                     color: '&',
-                    margin: '&',
+                    margin: '@',
                     nodata: '@',
                     x: '&',
                     y: '&',
@@ -813,7 +853,7 @@
                     xaxisrotatelabels: '@',
                     xaxisrotateylabel: '@',
                     xaxisstaggerlabels: '@',
-                    xaxisaxislabeldistance: '@',
+                    xaxislabeldistance: '@',
                     //yaxis
                     yaxisorient: '&',
                     yaxisticks: '&',
@@ -859,6 +899,7 @@
                 }],
                 link: function(scope, element, attrs){
                     watchDimensions(scope, attrs, element);
+                    watchMargins(scope);
                     scope.$watch('data', function(data){
                         if (data && angular.isDefined(scope.filtername) && angular.isDefined(scope.filtervalue)) {
                             data =  $filter(scope.filtername)(data, scope.filtervalue);
@@ -956,7 +997,7 @@
                     xaxisrotatelabels: '@',
                     xaxisrotateylabel: '@',
                     xaxisstaggerlabels: '@',
-                    xaxisaxislabeldistance: '@',
+                    xaxislabeldistance: '@',
                     //yaxis
                     yaxisorient: '&',
                     yaxisticks: '&',
@@ -1067,7 +1108,7 @@
                     tooltipcontent: '&',
                     color: '&',
                     showcontrols: '@',
-                    margin: '&',
+                    margin: '@',
                     nodata: '@',
                     x: '&',
                     y: '&',
@@ -1100,7 +1141,7 @@
                     xaxisrotatelabels: '@',
                     xaxisrotateylabel: '@',
                     xaxisstaggerlabels: '@',
-                    xaxisaxislabeldistance: '@',
+                    xaxislabeldistance: '@',
                     //yaxis
                     yaxisorient: '&',
                     yaxisticks: '&',
@@ -1146,6 +1187,7 @@
                 }],
                 link: function(scope, element, attrs){
                     watchDimensions(scope, attrs, element);
+                    watchMargins(scope);
                     scope.$watch('data', function(data){
                         if (data && angular.isDefined(scope.filtername) && angular.isDefined(scope.filtervalue)) {
                             data =  $filter(scope.filtername)(data, scope.filtervalue);
@@ -1361,7 +1403,7 @@
                     xaxisrotatelabels: '@',
                     xaxisrotateylabel: '@',
                     xaxisstaggerlabels: '@',
-                    xaxisaxislabeldistance: '@',
+                    xaxislabeldistance: '@',
                     //yaxis
                     yaxisorient: '&',
                     yaxisticks: '&',
@@ -1558,7 +1600,7 @@
                     xaxisrotatelabels: '@',
                     xaxisrotateylabel: '@',
                     xaxisstaggerlabels: '@',
-                    xaxisaxislabeldistance: '@',
+                    xaxislabeldistance: '@',
                     //yaxis
                     yaxisorient: '&',
                     yaxisticks: '&',
@@ -1704,7 +1746,7 @@
                     xaxisrotatelabels: '@',
                     xaxisrotateylabel: '@',
                     xaxisstaggerlabels: '@',
-                    xaxisaxislabeldistance: '@',
+                    xaxislabeldistance: '@',
                     //yaxis
                     y1axisorient: '&',
                     y1axisticks: '&',
@@ -1891,7 +1933,7 @@
                     xaxisrotatelabels: '@',
                     xaxisrotateylabel: '@',
                     xaxisstaggerlabels: '@',
-                    xaxisaxislabeldistance: '@',
+                    xaxislabeldistance: '@',
 
                     //x2axis
                     x2axisorient: '&',
@@ -2086,10 +2128,15 @@
                     $scope.d3Call = function(data, chart){
                         checkElementID($scope, $attrs, $element, chart, data);
                     };
-                    removeWindowResizeEvent($scope);
                 }],
                 link: function(scope, element, attrs){
-                    watchDimensions(scope, attrs, element);
+                    scope.$watch( '[width, height]', function () {
+                        if ( scope.chart ) {
+                            scope.chart.width(scope.width).height(scope.height);
+                            scope.d3Call( scope.data, scope.chart );
+                        }
+                    }, true);
+
                     scope.$watch('data', function(data){
                         if (data && angular.isDefined(scope.filtername) && angular.isDefined(scope.filtervalue)) {
                             data =  $filter(scope.filtername)(data, scope.filtervalue);
@@ -2121,7 +2168,6 @@
                                     }
 
                                     scope.d3Call(data, chart);
-                                    scope.windowResizeResult = nv.utils.windowResize(chart.update);
                                     scope.chart = chart;
                                     return chart;
                                 },
