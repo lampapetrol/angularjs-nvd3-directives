@@ -48,9 +48,12 @@
             d3.select(d3Select)
                 .append('svg');
         }
-        d3.select(d3Select + ' svg')
-            .attr('viewBox', '0 0 ' + scope.width + ' ' + scope.height)
-            .datum(data)
+
+        var svgContainer= d3.select( d3Select + ' svg' );
+        if (scope.width || scope.height) {
+            svgContainer.attr( 'viewBox', '0 0 ' + scope.width + ' ' + scope.height )
+        }
+        svgContainer.datum(data)
             .transition().duration((attrs.transitionduration === undefined ? 250 : (+attrs.transitionduration)))
             .call(chart);
     }

@@ -1,4 +1,4 @@
-/*! angularjs-nvd3-directives - v0.2.0 - 2017-07-04
+/*! angularjs-nvd3-directives - v0.2.0 - 2017-12-15
  * http://angularjs-nvd3-directives.github.io/angularjs-nvd3-directives
  * Copyright (c) 2017 Christian Maurer; Licensed Apache License, v2.0 */
 ( function () {
@@ -799,7 +799,11 @@
     if ( d3.select( d3Select + ' svg' ).empty() ) {
       d3.select( d3Select ).append( 'svg' );
     }
-    d3.select( d3Select + ' svg' ).attr( 'viewBox', '0 0 ' + scope.width + ' ' + scope.height ).datum( data ).transition().duration( attrs.transitionduration === undefined ? 250 : +attrs.transitionduration ).call( chart );
+    var svgContainer = d3.select( d3Select + ' svg' );
+    if ( scope.width || scope.height ) {
+      svgContainer.attr( 'viewBox', '0 0 ' + scope.width + ' ' + scope.height );
+    }
+    svgContainer.datum( data ).transition().duration( attrs.transitionduration === undefined ? 250 : +attrs.transitionduration ).call( chart );
   }
 
   function updateDimensions( scope, attrs, element, chart ) {
